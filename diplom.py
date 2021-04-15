@@ -83,7 +83,7 @@ def upload_vk_photo_to_yadisk(token_yandex, user_vk_id, vk_token):
             break
 
 
-token_ya = 'AQAAAAAizdckAADLW81HyYVB6EuMrvBXWHcDqwA'
+token_ya = ''
 token_vk = '958eb5d439726565e9333aa30e50e0f937ee432e927f0dbd541c541887d919a7c56f95c04217915c32008'
 user_id = int(input('Введите свой id во вконтакте: '))
 upload_vk_photo_to_yadisk(token_ya, user_id, token_vk)
