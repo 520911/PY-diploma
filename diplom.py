@@ -23,19 +23,24 @@ def get_vk_photos(user_vk_id, vk_token):
     list_of_photos_info = []
     list_of_photos_urls = []
     list_of_file_name = []
-    for photo_info in tqdm(data['response']['items'], desc='Loading...', total=5, unit='S'):
+    for photo_info in tqdm(data['response']['items'], desc='Loading...', total=5,
+                           unit='S'):  # Извлечение данных в цикле в формате json
         time.sleep(1)
-        type_size = photo_info['sizes'][-1]['type']
+        type_size = photo_info['sizes'][-1]['type']  # Получение типа самой большой по размеру фотографии
         file_name = str(photo_info['likes']['count']) + str(
-            photo_info['date']) + '.jpg'
-        file_url = photo_info['sizes'][-1]['url']
-        list_of_photos_info.append({'file_name': file_name, 'size': type_size})
-        list_of_photos_urls.append(file_url)
-        list_of_file_name.append(file_name)
-    result_dict = dict(zip(list_of_file_name, list_of_photos_urls))
+            photo_info[
+                'date']) + '.jpg'  # Формирование имени фотографии, которое состоит из количества лайков
+        # под фотографией и даты добавления
+        file_url = photo_info['sizes'][-1]['url']  # Поиск ссылки на самую большую фотографию для выгрузки
+        list_of_photos_info.append({'file_name': file_name, 'size': type_size})  # Формирование временного листа
+        # для выгрузки в json
+        list_of_photos_urls.append(file_url)  # Сохранение урлов фотографий в список
+        list_of_file_name.append(file_name)  # Сохранение имен фотографий в список
+    result_dict = dict(zip(list_of_file_name, list_of_photos_urls))  # Формирование словаря для последующего
+    # использования значений урлов и имени фотографий
     with open('photos_info.json', 'w') as file:
-        json.dump(list_of_photos_info, file, indent=2)
-    return result_dict
+        json.dump(list_of_photos_info, file, indent=2)  # Сохранения json информацции на диске о фотографиях
+    return result_dict  # Получение словаря с названием и урлом фотографий
 
 
 def ya_headers(token_yandex):
@@ -45,7 +50,7 @@ def ya_headers(token_yandex):
     }
 
 
-def create_ya_folder(token_yandex):
+def create_ya_folder(token_yandex):  # Создание папки на яндекс диске
     ya_url = 'https://cloud-api.yandex.net/v1/disk/resources/'
     headers = ya_headers(token_yandex)
     params = {'path': 'vkphotos'}
@@ -55,17 +60,18 @@ def create_ya_folder(token_yandex):
         print('Папка успешно создана')
     elif response.status_code == 409:
         print('Такая папка уже существует')
-    return result_url
+    return result_url # Функция возвращает путь до новой папки на яндекс диске
 
 
 def upload_vk_photo_to_yadisk(token_yandex, user_vk_id, vk_token):
     ya_url = 'https://cloud-api.yandex.net/v1/disk/resources/upload?'
-    create_ya_folder(token_yandex)
+    create_ya_folder(token_yandex)  # Вызов функции для оздания папки
     headers = ya_headers(token_yandex)
-    dict_of_photos = get_vk_photos(user_vk_id, vk_token)
+    dict_of_photos = get_vk_photos(user_vk_id, vk_token)  # Вызов функции для получения словаря с информацией
+    # об имени и ссылке на фотографию
     for key, value in tqdm(dict_of_photos.items(), desc='Downloads photo...', total=5, colour='green'):
         time.sleep(0.5)
-        params = {
+        params = {  # Использование словаря с информацией о фотографиях для формирования параметров загрузки на диск
             'path': 'vkphotos/' + key,
             'url': value,
         }
@@ -83,7 +89,7 @@ def upload_vk_photo_to_yadisk(token_yandex, user_vk_id, vk_token):
             break
 
 
-token_ya = ''
+token_ya = 'AQAAAAAizdckAADLW81HyYVB6EuMrvBXWHcDqwA'
 token_vk = '958eb5d439726565e9333aa30e50e0f937ee432e927f0dbd541c541887d919a7c56f95c04217915c32008'
 user_id = int(input('Введите свой id во вконтакте: '))
 upload_vk_photo_to_yadisk(token_ya, user_id, token_vk)
