@@ -60,7 +60,7 @@ def create_ya_folder(token_yandex):  # Создание папки на янде
         print('Папка успешно создана')
     elif response.status_code == 409:
         print('Такая папка уже существует')
-    return result_url # Функция возвращает путь до новой папки на яндекс диске
+    return result_url  # Функция возвращает путь до новой папки на яндекс диске
 
 
 def upload_vk_photo_to_yadisk(token_yandex, user_vk_id, vk_token):
