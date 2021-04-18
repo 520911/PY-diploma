@@ -13,7 +13,7 @@ class VkYaPhotos:
     url = 'https://api.vk.com/method/'
     ya_url = 'https://cloud-api.yandex.net/v1/disk/resources/'
 
-    def __init__(self, ya_token, vk_token, version):
+    def __init__(self, ya_token, vk_token, version='5.130'):
         self.vk_token = vk_token
         self.ya_token = ya_token
         self.version = version
@@ -102,5 +102,5 @@ class VkYaPhotos:
                 break
 
 
-service = VkYaPhotos(ya_token1, vk_token1, '5.130')
+service = VkYaPhotos(ya_token1, vk_token1)
 service.upload_vk_photo_to_yadisk()
