@@ -2,7 +2,7 @@ import time
 import requests
 import json
 from tqdm import tqdm
-
+#  Первая проба диплома, сохранил для памяти развития мысли ...
 
 def get_vk_photos(user_vk_id, vk_token):
     user_url = 'https://api.vk.com/method/photos.get?'
